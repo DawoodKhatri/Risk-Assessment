@@ -31,32 +31,8 @@ def sanitize_json(response_string):
     return parsed_data
 
 
-sample_data = {
-    "companyName": "Luminar Technologies",
-    "industry": "Technology",
-    "annualRevenue": "1.5B",
-    "shippingVolume": 1000,
-    "internationalShipping": True,
-    "category": "Risk",
-    "riskName": "Supply Chain Risk",
-    "audience": "Supply Chain Managers",
-    "cause": "Pandemic",
-    "subcategory": "Shipping",
-    "explanation": "Shipping delays due to pandemic",
-    "lowRisk": 112,
-    "mediumRisk": 2231,
-    "highRisk": 32314,
-    "units": "USD",
-    "type": "Currency",
-    "perValue": "1000",
-    "otherValue": "USD",
-    "frequency": "Monthly",
-    "additionalInfo": "Shipping delays due to pandemic",
-}
-
-
 @app.post("/api/v1/analyze")
-async def analyze_risk():
+async def analyze_risk(data: dict):
 
     llm = ChatOpenAI(api_key=api_key, model="gpt-4o")
 
@@ -66,15 +42,15 @@ async def analyze_risk():
 
     content = system_prompt + knowledge
 
-    data = """
+    user_data = """
     Below is the data provided by the user for analysis:
     """ + json.dumps(
-        sample_data, indent=4
+        data, indent=4
     )
 
     messages = [
         {"role": "system", "content": content},
-        {"role": "user", "content": data},
+        {"role": "user", "content": user_data},
     ]
 
     response = llm.invoke(messages)

@@ -6,10 +6,6 @@ def get_system_prompt():
     pie_chart = random.randint(1, 2)
     line_chart = random.randint(1, 2)
 
-    print("bar_chart", bar_chart)
-    print("pie_chart", pie_chart)
-    print("line_chart", line_chart)
-
     system_prompt = """
     You are provided with a JSON object containing detailed risk data for a company. Your tasks are as follows:
 
