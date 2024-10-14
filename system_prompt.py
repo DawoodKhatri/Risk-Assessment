@@ -16,9 +16,11 @@ def get_system_prompt():
     """.format(
         bar_chart=bar_chart, pie_chart=pie_chart, line_chart=line_chart
     )
-    
+
     text = """
     3. **Risk Overview**: Provide an overview of each risk, including its name and severity score (high, medium, or low).
+
+    4. Low Risk Amount, Medium Risk Amount, and High Risk Amount: Provide the total amount of low, medium, and high risks identified in the data.
 
     ### **Input Data Schema**
 
@@ -70,7 +72,12 @@ def get_system_prompt():
             "score": "high" | "medium" | "low"
             }
             // ... additional risks
-        ]
+        ],
+        "Amount": {
+            "lowRisk": number,
+            "mediumRisk": number,
+            "highRisk": number
+        }
     }
 
     Guidelines for Visualizations:
