@@ -1,4 +1,5 @@
 import pandas as pd
+import json
 
 
 def getExtractedData():
@@ -9,27 +10,30 @@ def getExtractedData():
 
     df = df.where(pd.notnull(df), None)
 
-    data = {
-        "topLevelCategory": df["Unnamed: 1"].values[1:].tolist(),
-        "audience": df["Unnamed: 3"].values[1:].tolist(),
-        "cause": df["Unnamed: 4"].values[1:].tolist(),
-        "subCategory": df["Unnamed: 5"].values[1:].tolist(),
-        "externalSubCategory": df["Unnamed: 6"].values[1:].tolist(),
-        "explaination": df["Unnamed: 7"].values[1:].tolist(),
-        "measures": {
-            "units": df["Measures"].values[1:].tolist(),
-            "type": df["Unnamed: 9"].values[1:].tolist(),
-            "per": df["Unnamed: 10"].values[1:].tolist(),
-            "other": df["Unnamed: 11"].values[1:].tolist(),
-            "frequency": df["Unnamed: 12"].values[1:].tolist(),
-        },
-        "riskLevel": {
-            "low": df["Risk Level"].values[1:].tolist(),
-            "medium": df["Unnamed: 14"].values[1:].tolist(),
-            "high": df["Unnamed: 15"].values[1:].tolist(),
-        },
-        "estimationRational": df["Unnamed: 16"].values[1:].tolist(),
-        "mitigation": df["Unnamed: 17"].values[1:].tolist(),
-    }
+    data = []
 
-    return data
+    for i in range(1, len(df)):
+        data.append({
+            "category": df["Unnamed: 1"][i],
+            "audience": df["Unnamed: 3"][i],
+            "cause": df["Unnamed: 4"][i],
+            "subCategory": df["Unnamed: 5"][i],
+            "externalSubCategory": df["Unnamed: 6"][i],
+            "explaination": df["Unnamed: 7"][i],
+            "measures": {
+                "units": df["Measures"][i],
+                "type": df["Unnamed: 9"][i],
+                "per": df["Unnamed: 10"][i],
+                "other": df["Unnamed: 11"][i],
+                "frequency": df["Unnamed: 12"][i],
+            },
+            "riskLevel": {
+                "low": df["Risk Level"][i],
+                "medium": df["Unnamed: 14"][i],
+                "high": df["Unnamed: 15"][i],
+            },
+            "estimationRational": df["Unnamed: 16"][i],
+            "mitigation": df["Unnamed: 17"][i],
+        })
+
+    return json.dumps(data)
