@@ -7,8 +7,6 @@ from langchain_openai import ChatOpenAI
 import json
 from system_prompt import get_system_prompt
 from utils.getData import getExtractedData
-import random
-
 
 load_dotenv()
 
@@ -26,7 +24,8 @@ app.add_middleware(
 
 
 def sanitize_json(response_string):
-    response_string = response_string.replace("```", "").replace("json", "").strip()
+    response_string = response_string.replace("```json", "")
+    response_string = response_string.replace("```", "")
     parsed_data = json.loads(response_string)
     return parsed_data
 
@@ -40,20 +39,20 @@ async def analyze_risk(data: dict):
 
     knowledge = getExtractedData()
 
-    content = system_prompt + knowledge
-
     user_data = """
     Below is the data provided by the user for analysis:
     """ + json.dumps(
         data, indent=4
     )
+    content = system_prompt + knowledge + user_data
 
-    messages = [
-        {"role": "system", "content": content},
-        {"role": "user", "content": user_data},
-    ]
+    messages = [{"role": "system", "content": content}]
 
     response = llm.invoke(messages)
+
+    with open("response.json", "w") as f:
+        f.write(response.content)
+
     response = sanitize_json(response.content)
 
     return {"success": True, "data": response}

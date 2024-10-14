@@ -7,11 +7,11 @@ def get_system_prompt():
     line_chart = random.randint(1, 2)
 
     system_prompt = """
-    You are provided with a JSON object containing detailed risk data for a company. Your tasks are as follows:
+    You are provided with a JSON object containing detailed risk analysis data. Use this data to guide your tasks, which are as follows:
 
-    1. **Risk Mitigation Plan**: Review the input data and create a comprehensive risk mitigation plan in **Markdown format** based on the provided information.
+    1. **Risk Mitigation Plan**: Use the knowledge base data to create a risk mitigation plan in **Markdown format**.
 
-    2. **Visualizations**: Generate meaningful visualizations that represent the data effectively. You can use any chart types such as **bar charts**, **pie charts**, or **line charts**. The visualizations should be structured in a way that is easy to integrate into a frontend UI. Generate {bar_chart} bar charts, {pie_chart} pie charts, and {line_chart} line charts.
+    2. **Visualizations**: Generate meaningful visualizations that represent the data effectively. You can use charts bar charts, pie charts, or line charts. Description of the graph should be short and to the point. Also give the X and Y axis labels. The visualizations should be structured in a way that is easy to integrate into a frontend UI. Generate {bar_chart} bar charts, {pie_chart} pie charts, and {line_chart} line charts.
 
     """.format(
         bar_chart=bar_chart, pie_chart=pie_chart, line_chart=line_chart
@@ -20,33 +20,18 @@ def get_system_prompt():
     text = """
     3. **Risk Overview**: Provide an overview of each risk, including its name and severity score (high, medium, or low).
 
-    4. Low Risk Amount, Medium Risk Amount, and High Risk Amount: Provide the total amount of low, medium, and high risks identified in the data.
+    4. Low Risk Amount, Medium Risk Amount, and High Risk Amount: Provide the total amount of low, medium, and high risks values in dollars.
 
     ### **Input Data Schema**
 
     The input JSON object will have the following structure from the User:
 
     {
-        "companyName": "string",
-        "industry": "string",
-        "annualRevenue": "string",
-        "shippingVolume": number,
-        "internationalShipping": boolean,
-        "category": "string",
-        "riskName": "string",
-        "audience": "string",
-        "cause": "string",
-        "subcategory": "string",
-        "explanation": "string",
-        "lowRisk": number,
-        "mediumRisk": number,
-        "highRisk": number,
-        "units": "string",
-        "type": "string",
-        "perValue": "string",
-        "otherValue": "string",
-        "frequency": "string",
-        "additionalInfo": "string"
+        "industry": "",
+        "annualRevenue": "",
+        "shippingVolume": 0,
+        "internationalShipping": true,
+        "explanation": ""
     }
 
     ### **Output Data Schema**
@@ -86,13 +71,12 @@ def get_system_prompt():
     3. Description: Provide a brief description explaining what the visualization represents.
 
     Instructions:
-    1. Comprehensiveness: Ensure the risk mitigation plan addresses all relevant risks identified in the input data and it should be short and to the point.
-    2. Clarity: Present information clearly and concisely, making it easy for stakeholders to understand.
-    3. Integration-Friendly: Structure the output JSON so it can be easily integrated into any frontend UI for rendering charts and displaying information.
-    4. Accuracy: Double-check all numerical values and ensure they are correctly represented in the visualizations and risk overview.
-    5. Customization: Feel free to create any additional visualizations that you believe would be helpful, as long as they adhere to the specified format.
-
-    # Below is the data source for the risk analysis #
+    1. Output must be striclty in JSON format and should follow the schema provided above.
+    2. The risk mitigation plan should be in Markdown format.
+    3. The visualizations should be easy to integrate into a frontend UI.
+    4. The risk overview should include the name and severity score of each risk.
+    5. The total amount of low, medium, and high risks should be provided in dollars.
+    
     """
 
     return system_prompt + text
